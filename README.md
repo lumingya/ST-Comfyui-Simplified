@@ -1,6 +1,7 @@
 # ST-Comfyui-Simplified
 SillyTavern 的 ComfyUI 连接插件，简化复杂配置过程为 导出-导入-填写节点id 三个步骤
 
+
 <ai写的介绍>
 
 这是一个为 SillyTavern 设计的高级 ComfyUI 连接插件。它允许你在酒馆对话中通过简单的标签触发图像生成，支持导入多种 ComfyUI 工作流（API 格式），并为每个工作流单独配置节点 ID，解决了传统插件只能使用固定工作流的痛点。
@@ -39,7 +40,6 @@ SillyTavern 的 ComfyUI 连接插件，简化复杂配置过程为 导出-导入
         支持一键删除不需要的工作流。
 
         提供手动测试框，无需触发对话即可测试当前工作流是否正常工作。
-
 🛠️ 使用指南 (Usage Guide)
 1. 准备 ComfyUI
 
