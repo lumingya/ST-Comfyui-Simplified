@@ -1,0 +1,69 @@
+<div class="comfy-settings-ui">
+    <!-- 顶部标题栏 -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;">
+        <div id="comfy_global_status" style="font-size:0.8em; color:cyan;">准备就绪</div>
+        <button id="comfy_btn_reset" class="menu_button" style="padding:2px 8px; font-size:0.8em; background:rgba(200,0,0,0.4);" title="重置状态">
+            <i class="fa-solid fa-rotate-right"></i>
+        </button>
+    </div>
+
+    <!-- 1. 工作流配置区域 -->
+    <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 5px; margin-bottom: 8px;">
+        <label style="font-weight:bold; font-size:0.9em;">1. ComfyUI 工作流配置</label>
+        
+        <!-- 下拉选择 + 删除按钮 (Flex布局) -->
+        <div style="display:flex; align-items:center; gap:5px; margin-top:8px; margin-bottom:5px;">
+            <select id="comfy_workflow_select" class="text_pole" style="flex-grow:1; width:0; font-size:0.8em; padding:4px;" title="选择已保存的工作流">
+                <option value="" disabled selected>-- 空 --</option>
+            </select>
+            <button id="comfy_btn_delete_wf" class="menu_button" style="flex-shrink:0; padding:4px 8px; color:#ff8080;" title="删除当前选中的工作流">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </div>
+
+        <!-- 状态文字 -->
+        <div id="comfy_file_status" style="color: #aaa; font-size: 0.8em; margin-bottom: 8px; text-align: left; padding-left:2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            (未加载)
+        </div>
+
+        <!-- 导入按钮 (修复：强制100%宽度，Flex居中) -->
+        <label for="comfy_upload_json" class="menu_button" style="display: flex; justify-content: center; align-items: center; width: 100%; box-sizing: border-box; cursor: pointer; font-size: 0.85em; padding: 6px; margin-top: 5px;">
+            <i class="fa-solid fa-file-import" style="margin-right: 6px;"></i> 导入新工作流 (.json)
+        </label>
+        <input type="file" id="comfy_upload_json" accept=".json" style="display: none;">
+
+        <!-- 节点 ID 设置 -->
+        <div style="margin-top: 10px; border-top:1px dashed rgba(255,255,255,0.1); padding-top:8px; display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            <div>
+                <label style="font-size:0.75em; opacity:0.8;">输入节点 (Prompt)</label>
+                <input type="number" id="comfy_node_id" value="6" class="text_pole" style="width:100%; padding:2px; box-sizing: border-box;">
+            </div>
+            <div>
+                <label style="font-size:0.75em; opacity:0.8;">输出节点 (Image)</label>
+                <input type="text" id="comfy_output_node_id" placeholder="Auto" class="text_pole" style="width:100%; padding:2px; box-sizing: border-box;" title="留空则自动搜索">
+            </div>
+        </div>
+        <button id="comfy_btn_save_id" class="menu_button" style="width:100%; margin-top:5px; padding:4px; font-size:0.8em;">保存节点 ID</button>
+    </div>
+
+    <!-- 2. 触发设置区域 -->
+    <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 5px; margin-bottom: 8px;">
+        <label style="font-weight:bold; font-size:0.9em;">2. 触发与正则</label>
+        <div class="flex-container flexnowrap" style="margin-top:5px;">
+            <select id="image_generation_insert_type" class="text_pole widthNatural margin0" style="font-size:0.8em; width:100%">
+                <option value="inline">行内追加 (Inline)</option>
+                <option value="replace">替换标签 (Replace)</option>
+                <option value="disabled">禁用 (Disabled)</option>
+            </select>
+        </div>
+        <input id="prompt_injection_regex" class="text_pole" style="font-size:0.8em; width:100%; margin-top:5px; box-sizing: border-box;" placeholder="Regex...">
+    </div>
+
+    <!-- 底部测试区域 -->
+    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
+        <textarea id="comfy_test_prompt" class="text_pole" rows="1" placeholder="测试提示词..." style="width:100%; box-sizing: border-box;"></textarea>
+        <button id="comfy_btn_generate" class="menu_button" style="width: 100%; margin-top: 5px; justify-content: center;">
+            <i class="fa-solid fa-paintbrush"></i> 测试生成
+        </button>
+    </div>
+</div>

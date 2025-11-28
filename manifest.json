@@ -1,0 +1,9 @@
+{
+  "display_name": "Comfy simplified",
+  "requires": [],
+  "optional": [],
+  "js": "index.js",
+  "author": "luming",
+  "version": "0.0.1",
+  "auto_update": false
+}
