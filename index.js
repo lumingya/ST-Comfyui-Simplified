@@ -5,7 +5,7 @@ import { extension_settings, getContext } from "../../../extensions.js";
 import { eventSource, event_types, saveSettingsDebounced, updateMessageBlock, appendMediaToMessage } from "../../../../script.js";
 import { regexFromString } from '../../../utils.js';
 
-const extensionName = "st-comfy-simplified";
+const extensionName = "ST-Comfyui-Simplified";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
 const COMFY_API_URL = "http://127.0.0.1:8188"; 
 
@@ -409,4 +409,5 @@ async function waitForImageSafe(promptId, targetOutputId) {
             } catch (e) { }
         }, 1000);
     });
+
 }
