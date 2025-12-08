@@ -7,10 +7,11 @@ import { regexFromString } from '../../../utils.js';
 
 const extensionName = "ST-Comfyui-Simplified";
 const extensionFolderPath = `scripts/extensions/third-party/${extensionName}`;
-const COMFY_API_URL = "http://127.0.0.1:8188"; 
+// const COMFY_API_URL = "http://127.0.0.1:8188"; // 删除硬编码地址
 
 const defaultSettings = {
     insertType: 'inline', 
+    comfyUrl: "http://127.0.0.1:8188", // 新增：默认地址
     promptInjection: {
         enabled: false, 
         regex: '/<pic[^>]*\\sprompt="([^"]*)"[^>]*?>/g',
@@ -52,6 +53,12 @@ $(function () {
         eventSource.on(event_types.MESSAGE_RECEIVED, handleIncomingMessage);
     })();
 });
+
+// 获取当前的 API 地址（去除末尾斜杠）
+function getComfyUrl() {
+    let url = extension_settings[extensionName].comfyUrl || "http://127.0.0.1:8188";
+    return url.replace(/\/$/, "");
+}
 
 // 数据迁移函数：将纯 JSON 转换为带 ID 的对象结构
 function migrateOldData() {
@@ -144,6 +151,12 @@ function bindUIEvents() {
         e.stopPropagation(); e.preventDefault();
         $(this).parent().find(".inline-drawer-content").slideToggle(200);
         $(this).find(".inline-drawer-icon").toggleClass("down up");
+    });
+
+    // 0. 保存地址配置
+    $("#comfy_api_url").on("input", function() {
+        extension_settings[extensionName].comfyUrl = $(this).val();
+        saveSettingsDebounced();
     });
 
     // 1. 上传并保存 (初始化 ID)
@@ -254,6 +267,7 @@ function bindUIEvents() {
 function updateGlobalSettingsUI() {
     const s = extension_settings[extensionName];
     if(!s) return;
+    $("#comfy_api_url").val(s.comfyUrl || "http://127.0.0.1:8188"); // 更新地址输入框
     $("#image_generation_insert_type").val(s.insertType || "inline");
     $("#prompt_injection_regex").val(s.promptInjection.regex);
 }
@@ -329,7 +343,7 @@ async function runComfyGeneration(promptText, mode) {
         return null; 
     }
 
-    // 从当前加载的配置中读取 ID，而不是全局设置
+    const apiUrl = getComfyUrl(); // 使用动态获取的 URL
     const nodeId = loadedWorkflowData.nodeId || "6";
     const outputId = loadedWorkflowData.outputNodeId || "";
     
@@ -350,12 +364,12 @@ async function runComfyGeneration(promptText, mode) {
         }
         if (!found) throw new Error("输入节点无文本字段");
 
-        const res = await fetch(`${COMFY_API_URL}/prompt`, {
+        const res = await fetch(`${apiUrl}/prompt`, {
             method: "POST", headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ prompt: workflow })
         });
         
-        if (!res.ok) throw new Error("API 连接失败");
+        if (!res.ok) throw new Error("API 连接失败，请检查 URL 和跨域设置");
         const data = await res.json();
         const pid = data.prompt_id;
         
@@ -372,13 +386,14 @@ async function runComfyGeneration(promptText, mode) {
 }
 
 async function waitForImageSafe(promptId, targetOutputId) {
+    const apiUrl = getComfyUrl(); // 使用动态获取的 URL
     return new Promise((resolve, reject) => {
         let attempts = 0;
         const timer = setInterval(async () => {
             attempts++;
             if (attempts > 600) { clearInterval(timer); reject(new Error("超时")); return; }
             try {
-                const hRes = await fetch(`${COMFY_API_URL}/history/${promptId}`);
+                const hRes = await fetch(`${apiUrl}/history/${promptId}`);
                 const hData = await hRes.json();
                 
                 if (hData[promptId] && hData[promptId].outputs) {
@@ -400,7 +415,8 @@ async function waitForImageSafe(promptId, targetOutputId) {
                      }
 
                      if (imgInfo) {
-                         resolve(`${COMFY_API_URL}/view?filename=${imgInfo.filename}&subfolder=${imgInfo.subfolder}&type=${imgInfo.type}`);
+                         // 构造完整的图片 URL
+                         resolve(`${apiUrl}/view?filename=${imgInfo.filename}&subfolder=${imgInfo.subfolder}&type=${imgInfo.type}`);
                      } else {
                          reject(new Error("无图片输出"));
                      }
@@ -409,5 +425,4 @@ async function waitForImageSafe(promptId, targetOutputId) {
             } catch (e) { }
         }, 1000);
     });
-
 }
