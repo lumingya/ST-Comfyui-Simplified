@@ -7,6 +7,12 @@
         </button>
     </div>
 
+    <!-- 0. 连接设置 (新增) -->
+    <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 5px; margin-bottom: 8px;">
+        <label style="font-weight:bold; font-size:0.9em;">📡 ComfyUI 地址</label>
+        <input type="text" id="comfy_api_url" class="text_pole" placeholder="例如: http://192.168.1.5:8188" title="手机端请填电脑IP，电脑端填127.0.0.1" style="width:100%; margin-top:5px; box-sizing: border-box; font-family: monospace;">
+    </div>
+
     <!-- 1. 工作流配置区域 -->
     <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 5px; margin-bottom: 8px;">
         <label style="font-weight:bold; font-size:0.9em;">1. ComfyUI 工作流配置</label>
@@ -26,7 +32,7 @@
             (未加载)
         </div>
 
-        <!-- 导入按钮 (修复：强制100%宽度，Flex居中) -->
+        <!-- 导入按钮 -->
         <label for="comfy_upload_json" class="menu_button" style="display: flex; justify-content: center; align-items: center; width: 100%; box-sizing: border-box; cursor: pointer; font-size: 0.85em; padding: 6px; margin-top: 5px;">
             <i class="fa-solid fa-file-import" style="margin-right: 6px;"></i> 导入新工作流 (.json)
         </label>
